@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 // UTILITY
-export const GAMEPAD_BUTTONS = {
+const GAMEPAD_BUTTONS = {
     XBOX: {
         A: 0,
         B: 1,
@@ -22,7 +22,7 @@ export const GAMEPAD_BUTTONS = {
     },
 };
 
-export const GAMEPAD_AXES = {
+const GAMEPAD_AXES = {
     LEFT_STICK: {
         X_AXIS: 0,
         Y_AXIS: 1,
@@ -50,26 +50,26 @@ const isButtonPressed = (gamepad: Gamepad, button: GamepadButtons) => {
 };
 
 const moveX =
-    (deadZone: number) =>
+    (deadzone: number) =>
     (gamepad: Gamepad, stick: keyof GamepadAxes, direction: XDirections) => {
         const xVal = gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].X_AXIS];
-        if (direction === "left") return xVal < 0 - deadZone;
-        if (direction === "right") return xVal > 0 + deadZone;
+        if (direction === "left") return xVal < 0 - deadzone;
+        if (direction === "right") return xVal > 0 + deadzone;
     };
 
 const moveY =
-    (deadZone: number) =>
+    (deadzone: number) =>
     (gamepad: Gamepad, stick: keyof GamepadAxes, direction: YDirections) => {
         const yVal = gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].Y_AXIS];
-        if (direction === "up") return yVal < 0 - deadZone;
-        if (direction === "down") return yVal > 0 + deadZone;
+        if (direction === "up") return yVal < 0 - deadzone;
+        if (direction === "down") return yVal > 0 + deadzone;
     };
 // UTILITY END
 
 type Gamepads = (Gamepad | null)[];
 interface GamepadUtilsOptions {
     pollRate?: number;
-    stickDeadZone?: number;
+    stickDeadzone?: number;
 }
 
 export interface GamepadUtils {
@@ -89,7 +89,7 @@ export interface GamepadUtils {
 
 export const useGamepad = ({
     pollRate = 100,
-    stickDeadZone = 0.1,
+    stickDeadzone = 0.1,
 }: GamepadUtilsOptions): GamepadUtils => {
     const [gamepads, setGamepads] = useState<Gamepads>([]);
 
@@ -136,7 +136,7 @@ export const useGamepad = ({
     return {
         gamepads,
         isButtonPressed,
-        moveX: moveX(stickDeadZone!),
-        moveY: moveY(stickDeadZone!),
+        moveX: moveX(stickDeadzone!),
+        moveY: moveY(stickDeadzone!),
     };
 };
