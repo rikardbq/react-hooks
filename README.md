@@ -50,9 +50,9 @@ const TestComponent = () => {
 }
 ```
 
-# useGamepad (wip)
+# useGamepad
 
-A hook for simplifying usage of the GamepadAPI. Everything isn't implemented yet but will soon be as part of another little project I'm working on for myself.
+A hook for simplifying usage of the GamepadAPI. **Work in progress**
 
 ```typescript
 // example implementation in a React component
@@ -73,7 +73,7 @@ const TestComponent = () => {
     
     return (
         <div>
-            {isButtonPressed(gamepad1, "A") ? (
+            {isButtonPressed(gamepad1, "XBOX.A") ? (
                 <h1>
                     A PRESSED
                 </h1>
@@ -108,7 +108,7 @@ const [focusedElement, setFocusedElement] = useState(0);
 // able to be focused, depending on the implementation of course.
 
 // this here is just a random example of setting some state
-if (gamepad1 && isButtonPressed(gamepad1, "DPAD_LEFT")) {
+if (gamepad1 && isButtonPressed(gamepad1, "XBOX.DPAD_LEFT")) {
     limitRate(() => setFocusedElement(focusedElement - 1), 200);
 }
 ...
