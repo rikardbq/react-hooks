@@ -114,6 +114,9 @@ A good thing to do if manipulating something like a state variable is to use a r
 ...
 const limitRate = useRateLimit();
 const [focusedElement, setFocusedElement] = useState(0);
+const handleButtonPress = useCallback(() => {
+    setFocused(focusedElement - 1);
+}, [focusedElement]);
 
 // without a rate limit this will send so many setState calls that 
 // the focused element will not transition smoothly but instead 
@@ -122,7 +125,7 @@ const [focusedElement, setFocusedElement] = useState(0);
 
 // this here is just a random example of setting some state
 if (gamepad1 && isButtonPressed(gamepad1, "XBOX.DPAD_LEFT")) {
-    limitRate(() => setFocusedElement(focusedElement - 1), 200);
+    limitRate(handleButtonPress, 200);
 }
 ...
 ```
