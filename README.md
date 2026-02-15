@@ -63,8 +63,11 @@ const TestComponent = () => {
     const { 
         gamepads, 
         isButtonPressed, 
-        moveX, 
-        moveY 
+        stick: {
+            deadzone, 
+            moveX, 
+            moveY 
+        }
     } = useGamepad({ 
         pollRate: 16, 
         stickDeadZone: 0.1 
@@ -78,14 +81,24 @@ const TestComponent = () => {
                     A PRESSED
                 </h1>
             ) : null}
-            {moveX(gamepad1, "LEFT_STICK", "right") ? (
+            {moveX(gamepad1, "LEFT_STICK") < 0 - deadzone ? (
                 <h1>
-                    MOVED RIGHT WITH LEFT STICK
+                    MOVED LEFT
                 </h1>
             ): null}
-            {moveY(gamepad1, "RIGHT_STICK", "up") ? (
+            {moveX(gamepad1, "LEFT_STICK") > 0 + deadzone ? (
                 <h1>
-                    MOVED UP WITH RIGHT STICK
+                    MOVED RIGHT
+                </h1>
+            ): null}
+            {moveY(gamepad1, "RIGHT_STICK") < 0 - deadzone ? (
+                <h1>
+                    MOVED UP
+                </h1>
+            ): null}
+            {moveY(gamepad1, "RIGHT_STICK") > 0 + deadzone ? (
+                <h1>
+                    MOVED DOWN
                 </h1>
             ): null}
         </div>

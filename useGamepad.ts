@@ -37,8 +37,6 @@ type GamepadButtons = {
     [K in keyof typeof GAMEPAD_BUTTONS]: `${K & string}.${keyof (typeof GAMEPAD_BUTTONS)[K] & string}`;
 }[keyof typeof GAMEPAD_BUTTONS];
 type GamepadAxes = typeof GAMEPAD_AXES;
-type XDirections = "left" | "right";
-type YDirections = "up" | "down";
 
 const isButtonPressed = (gamepad: Gamepad, button: GamepadButtons) => {
     const [controller, key] = button.split(".") as [
@@ -49,21 +47,13 @@ const isButtonPressed = (gamepad: Gamepad, button: GamepadButtons) => {
     return gamepad.buttons[val].pressed;
 };
 
-const moveX =
-    (deadzone: number) =>
-    (gamepad: Gamepad, stick: keyof GamepadAxes, direction: XDirections) => {
-        const xVal = gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].X_AXIS];
-        if (direction === "left") return xVal < 0 - deadzone;
-        if (direction === "right") return xVal > 0 + deadzone;
-    };
+const moveX = (gamepad: Gamepad, stick: keyof GamepadAxes) => {
+    return gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].X_AXIS];
+};
 
-const moveY =
-    (deadzone: number) =>
-    (gamepad: Gamepad, stick: keyof GamepadAxes, direction: YDirections) => {
-        const yVal = gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].Y_AXIS];
-        if (direction === "up") return yVal < 0 - deadzone;
-        if (direction === "down") return yVal > 0 + deadzone;
-    };
+const moveY = (gamepad: Gamepad, stick: keyof GamepadAxes) => {
+    return gamepad.axes[(GAMEPAD_AXES as GamepadAxes)[stick].Y_AXIS];
+};
 // UTILITY END
 
 type Gamepads = (Gamepad | null)[];
@@ -75,16 +65,11 @@ interface GamepadUtilsOptions {
 export interface GamepadUtils {
     gamepads: Gamepads;
     isButtonPressed: (gamepad: Gamepad, button: GamepadButtons) => boolean;
-    moveX: (
-        gamepad: Gamepad,
-        stick: keyof GamepadAxes,
-        direction: XDirections,
-    ) => boolean | undefined;
-    moveY: (
-        gamepad: Gamepad,
-        stick: keyof GamepadAxes,
-        direction: YDirections,
-    ) => boolean | undefined;
+    stick: {
+        deadzone: number;
+        moveX: (gamepad: Gamepad, stick: keyof GamepadAxes) => number;
+        moveY: (gamepad: Gamepad, stick: keyof GamepadAxes) => number;
+    };
 }
 
 export const useGamepad = ({
@@ -136,7 +121,10 @@ export const useGamepad = ({
     return {
         gamepads,
         isButtonPressed,
-        moveX: moveX(stickDeadzone!),
-        moveY: moveY(stickDeadzone!),
+        stick: {
+            deadzone: stickDeadzone,
+            moveX,
+            moveY,
+        },
     };
 };
