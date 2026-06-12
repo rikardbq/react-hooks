@@ -1,8 +1,8 @@
 # useDebounce
 
-Simple debounce hook that exposes a function that takes another function as its parameter along with a time expressed in milliseconds.
-
-This will prevent the argument function from being run on every call if called multiple times within the given timeframe.
+Simple debounce hook that exposes a function that takes another function as its parameter along with a time expressed in milliseconds.\
+This will prevent the argument function from being run on every call if called multiple times within the given timeframe.\
+This hook stores internal state as a ref and if you need to use multiple debouncers at once, supply a unique ID for each.
 
 ```typescript
 // example implementation in a React component
@@ -16,7 +16,7 @@ const TestComponent = () => {
             <button onClick={() => {
                 debounce(() => {
                     console.log("CLICKED");
-                }, 500);
+                }, 500, "debouncer_id");
             }>
                 IM A BUTTON
             </button>
@@ -27,7 +27,8 @@ const TestComponent = () => {
 
 # useRateLimit
 
-Simple rate limit hook that works similarly to a debouncer except it only limits the rate at which the supplied function can be called, at a rate of 1/\<milliseconds_supplied\>.
+Simple rate limit hook that works similarly to a debouncer except it only limits the rate at which the supplied function can be called, at a rate of once every \<milliseconds_supplied\>.\
+This hook stores internal state as a ref and if you need to use multiple rate limiters at once, supply a unique ID for each.
 
 ```typescript
 // example implementation in a React component
@@ -41,7 +42,7 @@ const TestComponent = () => {
             <button onClick={() => {
                 limitRate(() => {
                     console.log("CLICKED");
-                }, 500);
+                }, 500, "rate_limiter_id");
             }>
                 IM A BUTTON
             </button>

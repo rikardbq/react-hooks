@@ -1,17 +1,23 @@
 import { useRef, useCallback, useEffect } from "react";
 
 export const useDebounce = () => {
-    const timer = useRef<number | undefined>(undefined);
-    const debouncer = useCallback((cb: Function, time: number = 250) => {
-        clearTimeout(timer.current);
-        timer.current = setTimeout(() => {
-            cb();
-        }, time);
-    }, []);
+    const timerRef = useRef<Record<string, number>>({});
+    const debouncer = useCallback(
+        (cb: Function, time: number = 250, id: string = "__default##") => {
+            const timerCurr = timerRef.current;
+            clearTimeout(timerCurr[id]);
+            timerCurr[id] = setTimeout(() => {
+                cb();
+            }, time);
+        },
+        [],
+    );
 
     useEffect(() => {
         return () => {
-            clearTimeout(timer.current);
+            Object.values(timerRef.current).forEach((timer) => {
+                clearTimeout(timer);
+            });
         };
     }, []);
 
